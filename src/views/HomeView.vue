@@ -2,7 +2,5 @@
 </script>
 
 <template>
-  <main>
-    <div>a</div>
-  </main>
+  <div>Home</div>
 </template>
