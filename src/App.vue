@@ -4,7 +4,7 @@ import NavBar from './components/NavBarComponent.vue'
 </script>
 
 <template>
-  <v-app class="max-width-app">
+  <v-app class="max-width-app" style="background: transparent;">
     <NavBar></NavBar>
     <v-main>
       <RouterView />
@@ -15,6 +15,15 @@ import NavBar from './components/NavBarComponent.vue'
 <style>
 html {
   overflow: hidden !important;
+}
+@media screen and (max-width: 600px) {
+  html {
+    overflow: auto !important;
+  }
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
 }
 
 .max-width-app {
