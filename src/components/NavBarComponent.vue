@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import router from '@/router'
 
-const toLogin = () => router.push({ name: 'login' })
+const toLogin = () => {
+  const isLogged = localStorage.getItem('isLogged')
+
+  if (isLogged) router.push({ name: 'main' })
+  else router.push({ name: 'login' })
+}
+
 </script>
 
 <template>

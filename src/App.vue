@@ -14,7 +14,6 @@ import NavBar from './components/NavBarComponent.vue'
 
 <style>
 html {
-  overflow: hidden !important;
 }
 @media screen and (max-width: 600px) {
   html {
@@ -24,6 +23,40 @@ html {
 
 body {
   font-family: 'Montserrat', sans-serif;
+}
+
+/* Personaliza o scrollbar em navegadores que suportam a propriedade scrollbar-width */
+/* Define a largura do scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Define a cor do scrollbar */
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+/* Define a cor da área que não é ocupada pelo scrollbar */
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Personaliza o scrollbar em navegadores que não suportam a propriedade scrollbar-width */
+/* Define a largura do scrollbar */
+body::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Define a cor do scrollbar */
+body::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+/* Define a cor da área que não é ocupada pelo scrollbar */
+body::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
 
 .max-width-app {
