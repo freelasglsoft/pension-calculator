@@ -1,195 +1,135 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, type Ref } from 'vue'
+import VueHighcharts from 'vue3-highcharts'
 import { useCategoriesStore } from '@/stores/categories'
-import { jsPDF } from 'jspdf'
-import html2canvas from 'html2canvas'
-import { money } from '@/helpers/Formatters'
-import { calculate } from '@/helpers/Calculator'
+import { ref, type Ref } from 'vue'
 import { ExpenseType, type ICategory } from '@/models/ICategory'
+import CurrencyFormatter from '@/components/CurrencyFormatter.vue'
+import { useDisplay } from 'vuetify'
 
 const store = useCategoriesStore()
 
-const genitorWeight = ref('')
-const genitoraWeight = ref('')
+const { mobile } = useDisplay()
 
-const exclusiveCategories: Ref<ICategory[]> = ref([])
-const defaultCategories: Ref<ICategory[]> = ref([])
-
-const exclusiveTotal = ref(0)
-const defaultTotal = ref(0)
-
-const total = ref('')
-
-const genitorPaidValue = ref('')
-const genitoraPaidValue = ref('')
-
-onMounted(() => {
-  defaultCategories.value = store.categories.filter(x => x.type === ExpenseType.DEFAULT)
-  exclusiveCategories.value = store.categories.filter(x => x.type === ExpenseType.EXCLUSIVE)
-
-  exclusiveTotal.value = exclusiveCategories.value.flatMap(x => x.items).reduce((acc, item) => Number(acc) + Number(item.value), 0)
-  defaultTotal.value = defaultCategories.value.flatMap(x => x.items).reduce((acc, item) => Number(acc) + Number(item.value), 0)
-
-  total.value = (exclusiveTotal.value + defaultTotal.value)
-    .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 })
-
-  const values = calculate(store.genitorValue, store.genitoraValue, 0)
-
-  genitorPaidValue.value = ((exclusiveTotal.value + defaultTotal.value) * values.genitorWeight)
-    .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    .replace('R$', '')
-  genitoraPaidValue.value = ((exclusiveTotal.value + defaultTotal.value) * values.genitoraWeight)
-    .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    .replace('R$', '')
-
-  genitorWeight.value = values.genitorWeight.toLocaleString('pt-BR', { style: 'percent', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 })
-  genitoraWeight.value = values.genitoraWeight.toLocaleString('pt-BR', { style: 'percent', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 })
+const options: Ref<any> = ref({
+  chart: {
+    plotBackgroundColor: null,
+    plotBorderWidth: null,
+    plotShadow: false,
+    type: 'pie',
+    animation: true,
+    width: 550,
+    height: 350
+  },
+  title: { text: '' },
+  tooltip: { pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>', style: { fontFamily: 'Montserrat' } },
+  accessibility: {
+    point: {
+      valueSuffix: '%'
+    }
+  },
+  credits: {
+    enabled: false,
+  },
+  plotOptions: {
+    pie: {
+      allowPointSelect: true,
+      cursor: 'pointer',
+      dataLabels: {
+        enabled: true,
+        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+        style: { fontFamily: 'Montserrat' }
+      }
+    }
+  },
+  series: [{
+    name: 'Percentual',
+    data: [{ name: 'Genitor', y: store.results.genitorWeight, color: '#404040' },  { name: 'Genitora', y: store.results.genitoraWeight, color: '#399B53' }]
+  }]
 })
 
-const downloadPDF = () => {
-  const elemento = document.getElementById('grid')
-  html2canvas(elemento!).then(function(canvas) {
-    const pdf = new jsPDF('landscape')
-    const imagemURL = canvas.toDataURL('image/png')
-    pdf.addImage(imagemURL, 'PNG', 0, 0, 0, 0)
-    pdf.save('meu-arquivo.pdf')
-  })
-}
-
-
-
+const getCategoryTotalValue = (category: ICategory) => category.items.reduce((acc, item) => Number(acc) + Number(item.value), 0)
 </script>
 
 <template>
-  <div class="main" id="grid">
-    <div class="grid">
-      <h3>DESPESAS COMUNS</h3>
-      <h3>DESPESAS EXCLUSIVAS</h3>
-    </div>
-    <v-divider class="my-2"></v-divider>
-    <div class="grid2">
-      <div>
-        <div v-for="(category, index) in defaultCategories" :key="index">
-          <div v-if="category.items.length">
-            <h2>{{ category.description }}</h2>
-            <div v-for="(item, itemIndex) in category.items" :key="itemIndex">
-              <div style="display: grid; grid-template-columns: 1fr 120px; height: 40px;">
-                <div class="d-flex align-center">{{ item.description }}</div>
-                <span class="d-flex align-center justify-space-between">
-                  <div>R$</div>
-                  <div>{{ item.value }}</div>
-                </span>
-              </div>
-            </div>
-          </div>
+  <div>
+    <div class="title-grid" style="margin: 32px 0;">
+      <div class="content" style="border-right: 1px solid rgb(200, 200, 200);">
+        <span class="title text-center font-weight-bold">DESPESAS COMUNS DE TODOS OS MORADORES DA CASA</span>
+        <div class="info" v-for="(category, index) in store.categories.filter(x => x.type === ExpenseType.DEFAULT)" :key="index">
+          {{ category.description }}<CurrencyFormatter :number="getCategoryTotalValue(category)" />
+        </div>
+        <div style="height: 48px;" v-for="(category, index) in store.categories.filter(x => x.type === ExpenseType.DEFAULT)" :key="index"></div>
+        <div class="info" style="font-weight: bold;">
+          Quantidade de moradores<span>{{ store.quantity }}</span>
+        </div>
+        <div class="info" style="font-weight: bold;">
+          Total referente ao alimentado<CurrencyFormatter :number="store.results.totalFedValue" />
         </div>
       </div>
-      <div>
-        <div v-for="(category, index) in exclusiveCategories" :key="index">
-          <div v-if="category.items.length">
-            <h2>{{ category.description }}</h2>
-            <div v-for="(item, itemIndex) in category.items" :key="itemIndex">
-              <div style="display: grid; grid-template-columns: 1fr 120px; height: 40px;">
-                <div class="d-flex align-center">{{ item.description }}</div>
-                <span class="d-flex align-center justify-space-between">
-                  <div>R$</div>
-                  <div>{{ item.value }}</div>
-                </span>
-              </div>
-            </div>
-          </div>
+      <div class="content">
+        <span class="title text-center font-weight-bold">DESPESAS EXCLUSIVAS DA CRIANÇA</span>
+        <div class="info" v-for="(category, index) in store.categories.filter(x => x.type === ExpenseType.EXCLUSIVE)" :key="index">
+          {{ category.description }}<CurrencyFormatter :number="getCategoryTotalValue(category)" />
+        </div>
+        <div class="info" style="font-weight: bold;">
+          Total<CurrencyFormatter :number="store.results.exclusiveTotalValue" />
         </div>
       </div>
     </div>
-    <!-- <div class="grid2 my-2">
-      <div style="display: grid; grid-template-columns: 1fr 120px; height: 40px;">
-        <h3 class="d-flex align-center"></h3>
-        <span class="d-flex align-center justify-space-between">
-          <div>R$</div>
-          <div>{{ defaultTotal }}</div>
-        </span>
-      </div>
-      <div style="display: grid; grid-template-columns: 1fr 120px; height: 40px;">
-        <h3 class="d-flex align-center"></h3>
-        <span class="d-flex align-center justify-space-between">
-          <div>R$</div>
-          <div>{{ exclusiveTotal }}</div>
-        </span>
-      </div>
-    </div> -->
-    <div>Total de gastos por mês: {{ total }}</div>
-    <div>
-      <div class="grid2">
-        <div>
-          <div style="display: grid; grid-template-columns: 1fr 120px; height: 40px;">
-            <h3 class="d-flex align-center">Genitor</h3>
-            <span class="d-flex align-center justify-space-between">
-              <div>R$</div>
-              <div>{{ store.genitorValue }}</div>
-            </span>
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 120px; height: 40px;">
-            <div class="d-flex align-center">Percentual</div>
-            <span class="d-flex align-center justify-space-between">
-              <div></div>
-              <div>{{ genitorWeight }}</div>
-            </span>
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 120px; height: 40px;">
-            <div class="d-flex align-center">Valor mensal</div>
-            <span class="d-flex align-center justify-space-between">
-              <div>R$</div>
-              <div>{{ genitorPaidValue }}</div>
-            </span>
-          </div>
+    <div class="title-grid" style="margin-bottom: 32px;">
+      <div class="content" style="border-right: 1px solid rgb(200, 200, 200);">
+        <span class="title text-center font-weight-bold">GENITORES</span>
+        <div class="info">
+          Total de despesas<CurrencyFormatter :number="store.results.totalValue" />
         </div>
-        <div>
-          <div style="display: grid; grid-template-columns: 1fr 120px; height: 40px;">
-            <h3 class="d-flex align-center">Genitora</h3>
-            <span class="d-flex align-center justify-space-between">
-              <div>R$</div>
-              <div>{{ store.genitoraValue }}</div>
-            </span>
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 120px; height: 40px;">
-            <div class="d-flex align-center">Percentual</div>
-            <span class="d-flex align-center justify-space-between">
-              <div></div>
-              <div>{{ genitoraWeight }}</div>
-            </span>
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 120px; height: 40px;">
-            <div class="d-flex align-center">Valor mensal</div>
-            <span class="d-flex align-center justify-space-between">
-              <div>R$</div>
-              <div>{{ genitoraPaidValue }}</div>
-            </span>
-          </div>
+        <div class="info">
+          Renda mensal (Genitor + Genitora)<CurrencyFormatter :number="store.results.totalGenitorsValue" />
         </div>
+        <div class="info" style="font-weight: bold;">
+          Valor referente ao Genitor<CurrencyFormatter :number="store.results.genitorValue" />
+        </div>
+        <div class="info" style="font-weight: bold;">
+          Valor referente a Genitora<CurrencyFormatter :number="store.results.genitoraValue" />
+        </div>
+      </div>
+      <div v-if="!mobile" class="content d-flex align-center justify-center">
+        <VueHighcharts :options="options"></VueHighcharts>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.main {
-  margin-top: 16px;
-  padding: 8px;
-  height: 90%;
-  overflow: scroll;
-}
-
-.grid {
+.title-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 600px) {
+  .title-grid {
+    grid-template-columns: 1fr;
+    row-gap: 24px;
+  }
+}
+
+.title-grid .content {
+  padding: 0 24px;
+}
+
+.title-grid div .title {
+  display: flex;
   align-items: center;
-  justify-items: center;
-  column-gap: 32px;
+  justify-content: center;
+  margin-bottom: 16px;
+  flex-direction: column;
 }
 
-.grid2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 32px;
+.title-grid div .info {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgb(200, 200, 200);
+  line-height: 1;
+  height: 48px;
+  justify-content: space-between;
 }
 </style>

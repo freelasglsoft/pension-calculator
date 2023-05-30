@@ -1,30 +1,68 @@
 <script setup lang="ts">
-import CurrencyInput from '@/components/CurrencyInputComponent.vue'
-import router from '@/router';
+import router from '@/router'
 import { useCategoriesStore } from '@/stores/categories'
+import { ref } from 'vue'
+import CurrencyInput from '@/components/CurrencyInput.vue'
 
 const store = useCategoriesStore()
+const loading = ref(false)
 
-const goToResults = () => router.push({ name: 'results' })
+const goToResults = () => {
+  if (!store.genitor || !store.genitora || !store.quantity) return
+
+  loading.value = true
+  store.generateResults()
+  store.clearData()
+  setTimeout(() => { 
+    loading.value = false 
+    router.push({ name: 'results' })
+  }, 2000)  
+}
 
 </script>
 
 <template>
-  <div class="d-flex flex-column align-center justify-space-between main">
-    <h1>Renda Mensal</h1>
-    <div class="d-flex align-center justify-space-arround" style="width: 100%;">
-      <v-text-field v-model="store.genitorValue" type="number" label="Genitor"></v-text-field>
-      <v-spacer></v-spacer>
-      <v-text-field v-model="store.genitoraValue" type="number" label="Genitora"></v-text-field>
-    </div>
-    <v-btn @click="goToResults">Resultados</v-btn>
+  <div class="main-container">
+    <v-row justify="center">
+      <h2>Renda Mensal</h2>
+    </v-row>
+    <v-row justify="center">
+      <v-col cols="12" sm="8" md="6">
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <CurrencyInput v-model="store.genitor" label="Salário da genitor"></CurrencyInput>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <CurrencyInput v-model="store.genitora" label="Salário da genitora"></CurrencyInput>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="store.quantity"
+                type="number"
+                label="Quantidade de moradores na casa"
+                variant="underlined"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <div class="d-flex align-center justify-end mt-4">
+            <v-btn class="mr-2" @click="goToResults" :loading="loading">
+              Resultados <v-icon right class="ml-1">mdi-notebook</v-icon>
+            </v-btn>
+          </div>
+        </v-container>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <style scoped>
-.main {
-  margin-top: 16px;
-  padding: 8px;
-  height: 90%;
+.main-container {
+  height: 80vh;
+  margin-top: 16vh;
 }
 </style>

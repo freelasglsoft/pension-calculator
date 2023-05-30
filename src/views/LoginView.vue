@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-import router from '@/router';
+import router from '@/router'
 
 const email = ref('')
 const password = ref('')
@@ -11,14 +11,14 @@ const phone = '15991906226'
 const text = 'Quero saber mais sobre o Simulador de Pensão.'
 const url = `https://api.whatsapp.com/send?phone=${phone}&text=${text}`
 
-const login = async (_: any) => {
+const login = async () => {
   loading.value = true
 
   try {
-    const auth = getAuth();
+    const auth = getAuth()
     await signInWithEmailAndPassword(auth, email.value, password.value)
     localStorage.setItem('isLogged', 'true')
-    router.push({ name: 'main' })
+    router.push({ name: 'category', query: { current: 0 } })
   } catch (error) {
     console.error(error);
   } finally {

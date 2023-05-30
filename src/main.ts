@@ -10,7 +10,8 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import "@mdi/font/css/materialdesignicons.css"
-import { initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app"
+import VueHighcharts from 'vue3-highcharts'
 
 const firebaseConfig = {
   apiKey: "AIzaSyBT9VSFoQ0qYJPrvUN24l0LeKYPKji_S9Y",
@@ -41,5 +42,6 @@ const vuetify = createVuetify({
 app.use(createPinia())
 app.use(router)
 app.use(vuetify)
+app.use(VueHighcharts)
 
 app.mount('#app')

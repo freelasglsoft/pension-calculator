@@ -1,5 +1,3 @@
-import { useCategoriesStore } from '@/stores/categories';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -16,9 +14,9 @@ const router = createRouter({
       component: () => import('@/views/LoginView.vue')
     },
     {
-      path: '/main',
-      name: 'main',
-      component: () => import('@/views/Mainview.vue'),
+      path: '/category',
+      name: 'category',
+      component: () => import('@/views/CategoryView.vue'),
       meta: { requiresAuth: true }
     },
     {

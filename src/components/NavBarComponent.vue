@@ -4,7 +4,7 @@ import router from '@/router'
 const toLogin = () => {
   const isLogged = localStorage.getItem('isLogged')
 
-  if (isLogged) router.push({ name: 'main' })
+  if (isLogged) router.push({ name: 'category', query: { current: 0 } })
   else router.push({ name: 'login' })
 }
 
@@ -36,6 +36,6 @@ const toLogin = () => {
 .nav-btn:hover {
   background-color: #404040;
   color: #399B53;
-  transform: scale(1.05); /* move o botão um pouco para cima */
+  transform: scale(1.05);
 }
 </style>
