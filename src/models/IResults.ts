@@ -8,4 +8,5 @@ export interface IResults {
   genitorWeight: number;
   genitoraValue: number;
   genitoraWeight: number;
+  suggestedPension: number;
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const toWhatsApp = () => {
-  const phone = '15991906226'
+  const phone = '43991950233'
   const text = 'Quero saber mais sobre o Simulador de Pensão.'
   window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${text}`, '_blank')
 }

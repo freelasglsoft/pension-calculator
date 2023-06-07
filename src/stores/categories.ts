@@ -5,7 +5,7 @@ import { PensionCalculator } from '@/helpers/PensionCalculator'
 import type { IResults } from '@/models/IResults'
 
 export const useCategoriesStore = defineStore('categories', {
-  state: () => ({ categories: [ ...categoriesMock ], genitor: 0, genitora: 0, quantity: 0, results: {} as IResults }),
+  state: () => ({ categories: [ ...categoriesMock ], genitor: 0, genitora: 0, quantity: 0, gender: 'Genitor', results: {} as IResults }),
   actions: {
     findCategory (order: number): ICategory {
       return this.categories.find(x => order === x.order)!
@@ -24,7 +24,7 @@ export const useCategoriesStore = defineStore('categories', {
       this.categories.find(x => order === x.order)?.items.splice(itemIndex, 1)
     },
     generateResults () {
-      this.results = new PensionCalculator(this.categories, this.genitor, this.genitora, this.quantity)
+      this.results = new PensionCalculator(this.categories, this.genitor, this.genitora, this.quantity, this.gender)
         .Calculate()
         .GetResults()
     },
@@ -33,6 +33,8 @@ export const useCategoriesStore = defineStore('categories', {
       this.genitor = 0
       this.genitora = 0
       this.quantity = 0
+      this.gender = ''
+      this.results = {} as IResults
     }
   }
 })

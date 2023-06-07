@@ -55,10 +55,12 @@ const getCategoryTotalValue = (category: ICategory) => category.items.reduce((ac
     <div class="title-grid" style="margin: 32px 0;">
       <div class="content" style="border-right: 1px solid rgb(200, 200, 200);">
         <span class="title text-center font-weight-bold">DESPESAS COMUNS DE TODOS OS MORADORES DA CASA</span>
-        <div class="info" v-for="(category, index) in store.categories.filter(x => x.type === ExpenseType.DEFAULT)" :key="index">
-          {{ category.description }}<CurrencyFormatter :number="getCategoryTotalValue(category)" />
+        <div v-for="(category, index) in store.categories.filter(x => x.type === ExpenseType.DEFAULT)" :key="index">
+          <div class="info font-weight-bold">{{ category.description }}<CurrencyFormatter :number="getCategoryTotalValue(category)" /></div>
+          <div class="info pl-4" v-for="(item, itemIndex) in category.items" :key="itemIndex">
+            {{ item.description }}<CurrencyFormatter :number="item.value" />
+          </div>
         </div>
-        <div style="height: 48px;" v-for="(category, index) in store.categories.filter(x => x.type === ExpenseType.DEFAULT)" :key="index"></div>
         <div class="info" style="font-weight: bold;">
           Quantidade de moradores<span>{{ store.quantity }}</span>
         </div>
@@ -68,8 +70,11 @@ const getCategoryTotalValue = (category: ICategory) => category.items.reduce((ac
       </div>
       <div class="content">
         <span class="title text-center font-weight-bold">DESPESAS EXCLUSIVAS DA CRIANÇA</span>
-        <div class="info" v-for="(category, index) in store.categories.filter(x => x.type === ExpenseType.EXCLUSIVE)" :key="index">
-          {{ category.description }}<CurrencyFormatter :number="getCategoryTotalValue(category)" />
+        <div v-for="(category, index) in store.categories.filter(x => x.type === ExpenseType.EXCLUSIVE)" :key="index">
+          <div class="info font-weight-bold">{{ category.description }}<CurrencyFormatter :number="getCategoryTotalValue(category)" /></div>
+          <div class="info pl-4" v-for="(item, itemIndex) in category.items" :key="itemIndex">
+            {{ item.description }}<CurrencyFormatter :number="item.value" />
+          </div>
         </div>
         <div class="info" style="font-weight: bold;">
           Total<CurrencyFormatter :number="store.results.exclusiveTotalValue" />
@@ -83,13 +88,19 @@ const getCategoryTotalValue = (category: ICategory) => category.items.reduce((ac
           Total de despesas<CurrencyFormatter :number="store.results.totalValue" />
         </div>
         <div class="info">
-          Renda mensal (Genitor + Genitora)<CurrencyFormatter :number="store.results.totalGenitorsValue" />
+          Renda líquida (Genitor)<CurrencyFormatter :number="store.genitor" />
         </div>
-        <div class="info" style="font-weight: bold;">
+        <div class="info">
+          Renda líquida (Genitora)<CurrencyFormatter :number="store.genitora" />
+        </div>
+        <div class="info">
           Valor referente ao Genitor<CurrencyFormatter :number="store.results.genitorValue" />
         </div>
-        <div class="info" style="font-weight: bold;">
+        <div class="info">
           Valor referente a Genitora<CurrencyFormatter :number="store.results.genitoraValue" />
+        </div>
+        <div class="info" style="font-weight: bold;">
+          Pensão sugerida<CurrencyFormatter :number="store.results.suggestedPension" />
         </div>
       </div>
       <div v-if="!mobile" class="content d-flex align-center justify-center">

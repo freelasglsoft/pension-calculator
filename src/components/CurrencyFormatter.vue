@@ -14,7 +14,7 @@ const formattedNumber = computed(() => {
     currency: 'BRL'
   })
 
-  return formatter.format(props.number)
+  return props.number ? formatter.format(props.number) : '-'
 })
 </script>
 

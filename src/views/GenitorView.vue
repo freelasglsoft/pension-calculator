@@ -12,7 +12,6 @@ const goToResults = () => {
 
   loading.value = true
   store.generateResults()
-  store.clearData()
   setTimeout(() => { 
     loading.value = false 
     router.push({ name: 'results' })
@@ -24,11 +23,16 @@ const goToResults = () => {
 <template>
   <div class="main-container">
     <v-row justify="center">
-      <h2>Renda Mensal</h2>
+      <h2>Renda Líquida</h2>
     </v-row>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6">
         <v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-autocomplete v-model="store.gender" hide-details variant="underlined" label="Gênero" :items="['Genitor', 'Genitora']"></v-autocomplete>
+            </v-col>
+          </v-row>
           <v-row>
             <v-col cols="12">
               <CurrencyInput v-model="store.genitor" label="Salário da genitor"></CurrencyInput>
