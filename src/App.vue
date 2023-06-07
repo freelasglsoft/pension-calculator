@@ -1,6 +1,19 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView, useRouter } from 'vue-router'
 import NavBar from './components/NavBarComponent.vue'
+import { onMounted } from 'vue'
+import { getAuth } from 'firebase/auth'
+
+const router = useRouter()
+
+onMounted(() => {
+  const auth = getAuth()
+  auth.onAuthStateChanged(user => {
+    if (user) return
+    localStorage.clear()
+    router.push('/login')
+  })
+})
 </script>
 
 <template>
