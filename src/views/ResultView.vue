@@ -5,6 +5,7 @@ import { ref, type Ref } from 'vue'
 import { ExpenseType, type ICategory } from '@/models/ICategory'
 import CurrencyFormatter from '@/components/CurrencyFormatter.vue'
 import { useDisplay } from 'vuetify'
+import html2canvas from 'html2canvas'
 
 const store = useCategoriesStore()
 
@@ -47,11 +48,23 @@ const options: Ref<any> = ref({
   }]
 })
 
+const downloadScreenshot = () => {
+  const divElement = document.getElementById('result-main')!
+
+  html2canvas(divElement, { scale: 2, logging: true }).then(function(canvas) {
+    const link = document.createElement('a')
+    const date = new Date().toISOString().split('T')[0]
+    link.href = canvas.toDataURL('image/png')
+    link.download = `Simulador de Pensão - (${date})`
+    link.click()
+  });
+}
+
 const getCategoryTotalValue = (category: ICategory) => category.items.reduce((acc, item) => Number(acc) + Number(item.value), 0)
 </script>
 
 <template>
-  <div>
+  <div id="result-main" style="padding: 16px;">
     <div class="title-grid" style="margin: 32px 0;">
       <div class="content" style="border-right: 1px solid rgb(200, 200, 200);">
         <span class="title text-center font-weight-bold">DESPESAS COMUNS DE TODOS OS MORADORES DA CASA</span>
@@ -108,9 +121,15 @@ const getCategoryTotalValue = (category: ICategory) => category.items.reduce((ac
       </div>
     </div>
   </div>
+  <v-btn class="fixed-btn" color="#399B53" @click="downloadScreenshot" icon="mdi-download"></v-btn>
 </template>
 
 <style scoped>
+.fixed-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
 .title-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
