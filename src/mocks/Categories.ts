@@ -4,17 +4,17 @@ export const categoriesMock: ICategory[] = [
   {
     description: 'Moradia',
     items: [
-      { description: 'Aluguel ou financiamento do imóvel', value: 1000.00 },
+      { description: 'Aluguel ou financiamento do imóvel', value: 0.00 },
       { description: 'IPTU', value: 0.00 },
-      { description: 'Energia', value: 250.00 },
+      { description: 'Energia', value: 0.00 },
       { description: 'Condomínio', value: 0.00 },
-      { description: 'Água', value: 60.00 },
-      { description: 'Gás', value: 120.00 },
-      { description: 'Internet', value: 125.00 },
-      { description: 'Netflix ou similar', value: 110.00 },
+      { description: 'Água', value: 0.00 },
+      { description: 'Gás', value: 0.00 },
+      { description: 'Internet', value: 0.00 },
+      { description: 'Netflix ou similar', value: 0.00 },
       { description: 'Serviços (empregada doméstica, babá, jardineiro, etc)', value: 0.00 },
-      { description: 'Animal de Estimação', value: 200.00 },
-      { description: 'Produtos de limpeza', value: 300.00 }
+      { description: 'Animal de Estimação', value: 0.00 },
+      { description: 'Produtos de limpeza', value: 0.00 }
     ],
     totalValue: 0,
     order: 0,
@@ -23,11 +23,11 @@ export const categoriesMock: ICategory[] = [
   {
     description: 'Alimentação',
     items: [
-      { description: 'Supermercado', value: 1000.00 },
-      { description: 'Feira', value: 300.00 },
-      { description: 'Padaria', value: 200.00 },
-      { description: 'Açougue', value: 800.00 },
-      { description: 'Lanches', value: 500.00 },
+      { description: 'Supermercado', value: 0.00 },
+      { description: 'Feira', value: 0.00 },
+      { description: 'Padaria', value: 0.00 },
+      { description: 'Açougue', value: 0.00 },
+      { description: 'Lanches', value: 0.00 },
       { description: 'Ifood', value: 0.00 }
     ],
     totalValue: 0,
@@ -37,11 +37,11 @@ export const categoriesMock: ICategory[] = [
   {
     description: 'Higiene',
     items: [
-      { description: 'Pomadas', value: 150.00 },
-      { description: 'Fraldas', value: 450.00 },
-      { description: 'Lenço umedecido', value: 150.00 },
+      { description: 'Pomadas', value: 0.00 },
+      { description: 'Fraldas', value: 0.00 },
+      { description: 'Lenço umedecido', value: 0.00 },
       { description: 'Corte de cabelo', value: 0.00 },
-      { description: 'Shampoo, condicionador, sabonetes, pasta e escova de dente', value: 100.00 }
+      { description: 'Shampoo, condicionador, sabonetes, pasta e escova de dente', value: 0.00 }
     ],
     totalValue: 0,
     order: 2,
@@ -61,7 +61,7 @@ export const categoriesMock: ICategory[] = [
     description: 'Saúde',
     items: [
       { description: 'Plano de saúde', value: 0.00 },
-      { description: 'Medicamentos', value: 450.00 },
+      { description: 'Medicamentos', value: 0.00 },
       { description: 'Dentista', value: 0.00 },
       { description: 'Consultas', value: 0.00 }
     ],
@@ -87,7 +87,7 @@ export const categoriesMock: ICategory[] = [
       { description: 'Mensalidade de esportes, música, etc', value: 0.00 },
       { description: 'Vestuário (fazer uma média de compra de roupas)', value: 0.00 },
       { description: 'Passeios, shopping, gastos com lazer, entre outros.', value: 0.00 },
-      { description: 'Uber', value: 150.00 }
+      { description: 'Uber', value: 0.00 }
     ],
     totalValue: 0,
     order: 6,
