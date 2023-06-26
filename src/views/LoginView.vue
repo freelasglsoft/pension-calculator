@@ -7,7 +7,7 @@ const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
 const loading = ref(false)
-const phone = '43991950233'
+const phone = '43999206317'
 const text = 'Quero saber mais sobre o Simulador de Pensão.'
 const url = `https://api.whatsapp.com/send?phone=${phone}&text=${text}`
 

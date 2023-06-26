@@ -8,7 +8,7 @@ const store = useCategoriesStore()
 const loading = ref(false)
 
 const goToResults = () => {
-  if (!store.genitor || !store.genitora || !store.quantity) return
+  if (!store.quantity) return
 
   loading.value = true
   store.generateResults()

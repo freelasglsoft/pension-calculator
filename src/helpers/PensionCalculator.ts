@@ -47,14 +47,16 @@ export class PensionCalculator {
 
     this.results.totalGenitorsValue = Number(this.genitor) + Number(this.genitora)
 
-    this.results.genitorWeight = this.genitor / this.results.totalGenitorsValue 
+    if (this.genitor) {
+      this.results.genitorWeight = this.genitor / this.results.totalGenitorsValue 
+      this.results.genitorValue = this.results.totalValue * this.results.genitorWeight
+    }
 
-    this.results.genitorValue = this.results.totalValue * this.results.genitorWeight
+    if (this.genitora) {
+      this.results.genitoraWeight = this.genitora / this.results.totalGenitorsValue 
+      this.results.genitoraValue = this.results.totalValue * this.results.genitoraWeight
+    }
     
-    this.results.genitoraWeight = this.genitora / this.results.totalGenitorsValue 
-
-    this.results.genitoraValue = this.results.totalValue * this.results.genitoraWeight
-
     const isGenitor = this.gender === 'Genitor'
 
     const limitValue = isGenitor ? this.genitora * 0.3 : this.genitor * 0.3
