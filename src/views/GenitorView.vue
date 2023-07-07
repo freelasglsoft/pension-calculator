@@ -30,7 +30,7 @@ const goToResults = () => {
         <v-container>
           <v-row>
             <v-col cols="12">
-              <v-autocomplete v-model="store.gender" hide-details variant="underlined" label="Gênero" :items="['Genitor', 'Genitora']"></v-autocomplete>
+              <v-autocomplete v-model="store.gender" hide-details variant="underlined" label="Com quem mora a criança?" :items="['Genitor', 'Genitora']"></v-autocomplete>
             </v-col>
           </v-row>
           <v-row>

@@ -43,7 +43,7 @@ export class PensionCalculator {
       .flatMap(x => x.items)
       .reduce((acc, item) => Number(acc) + Number(item.value), 0)
     
-    this.results.totalValue = this.results.defaultTotalValue + this.results.exclusiveTotalValue
+    this.results.totalValue = this.results.totalFedValue + this.results.exclusiveTotalValue
 
     this.results.totalGenitorsValue = Number(this.genitor) + Number(this.genitora)
 
